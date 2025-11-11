@@ -15,32 +15,30 @@
         }
     </style>
 
-    <style>
+   <style>
   .sparkle {
     position: fixed;
-    top: 0;
-    width: 4px;
-    height: 4px;
+    width: 8px;   /* your larger size */
+    height: 8px;
     border-radius: 50%;
     background: radial-gradient(circle, #fff, rgba(255,255,255,0));
-    pointer-events: none;
+    pointer-events: auto;
     opacity: 0.8;
-    animation: fall linear infinite;
   }
 
   @keyframes fall {
-    0%   { transform: translateY(0);   opacity: 0; }
-    10%  { opacity: 1; }
+    0% { transform: translateY(0); opacity: 1; }
     100% { transform: translateY(100vh); opacity: 0; }
   }
-    </style>
+</style>
+
 
 </head>
 
 <body>  
     <h1 class="center" >Arvo Gallery</h1>
     <br>
-    <p class="center" >Producing creative sounds and visuals🎨
+    <p class="center" >Producing creative sounds and visuals 🎨
         <br>
         <br>
         <br>
@@ -55,40 +53,114 @@
 
     <script>
   const sparkleCount = 80;
+  const sparkles = [];
 
   for (let i = 0; i < sparkleCount; i++) {
     const sparkle = document.createElement('div');
     sparkle.classList.add('sparkle');
 
     // Random horizontal position
-    sparkle.style.left = `${Math.random() * 100}vw`;
+    sparkle.x = Math.random() * window.innerWidth;
+    sparkle.style.left = `${sparkle.x}px`;
 
-    // Random size (keep your previous size)
-    const size = Math.random() * 8 + 5; // 5–13px
-    sparkle.style.width = `${size}px`;
-    sparkle.style.height = `${size}px`;
+    // Random vertical start position
+    sparkle.y = Math.random() * window.innerHeight;
+    sparkle.style.top = `${sparkle.y}px`;
 
-    // Colors remain unchanged
+    // Random size
+    sparkle.size = Math.random() * 8 + 5; // 5–13px
+    sparkle.style.width = `${sparkle.size}px`;
+    sparkle.style.height = `${sparkle.size}px`;
+
+    // Colors
     const colors = ['#ffffff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
     sparkle.style.background = `radial-gradient(circle, ${
       colors[Math.floor(Math.random() * colors.length)]
     }, transparent)`;
 
-    // Random animation duration
-    const duration = Math.random() * 4 + 3;
-    sparkle.style.animationDuration = `${duration}s`;
+    // Random speed
+    sparkle.speed = Math.random() * 1.5 + 0.5; // pixels per frame
 
-    // **No delay** → all sparkles start immediately
-    sparkle.style.animationDelay = `0s`;
+    // Enable pointer events for interactivity
+    sparkle.style.pointerEvents = 'auto';
+    sparkle.style.transition = 'transform 0.2s, opacity 0.2s';
+
+    // Hover effect
+    sparkle.addEventListener('mouseenter', () => {
+      sparkle.style.transform = 'scale(2)'; // grow
+      sparkle.style.opacity = 1;            // brighten
+    });
+    sparkle.addEventListener('mouseleave', () => {
+      sparkle.style.transform = 'scale(1)'; // back to normal
+      sparkle.style.opacity = 0.8;
+    });
+
+    // Click effect
+    sparkle.addEventListener('click', () => {
+      sparkle.remove(); // disappear when clicked
+      // Optionally, create a new sparkle at random position to maintain count
+      const newSparkle = createSparkle();
+      document.body.appendChild(newSparkle);
+      sparkles.push(newSparkle);
+    });
 
     document.body.appendChild(sparkle);
+    sparkles.push(sparkle);
+  }
 
-    // Restart at top when finished
-    sparkle.addEventListener('animationiteration', () => {
-      sparkle.style.left = `${Math.random() * 100}vw`;
+  function animate() {
+    for (const s of sparkles) {
+      s.y += s.speed;
+      if (s.y > window.innerHeight) s.y = 0; // loop to top
+      s.style.top = `${s.y}px`;
+    }
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  // Optional helper function to create new sparkle if one is clicked
+  function createSparkle() {
+    const sparkle = document.createElement('div');
+    sparkle.classList.add('sparkle');
+
+    sparkle.x = Math.random() * window.innerWidth;
+    sparkle.style.left = `${sparkle.x}px`;
+    sparkle.y = 0;
+    sparkle.style.top = `${sparkle.y}px`;
+    sparkle.size = Math.random() * 8 + 5;
+    sparkle.style.width = `${sparkle.size}px`;
+    sparkle.style.height = `${sparkle.size}px`;
+
+    const colors = ['#ffffff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
+    sparkle.style.background = `radial-gradient(circle, ${
+      colors[Math.floor(Math.random() * colors.length)]
+    }, transparent)`;
+
+    sparkle.speed = Math.random() * 1.5 + 0.5;
+    sparkle.style.pointerEvents = 'auto';
+    sparkle.style.transition = 'transform 0.2s, opacity 0.2s';
+
+    sparkle.addEventListener('mouseenter', () => {
+      sparkle.style.transform = 'scale(2)';
+      sparkle.style.opacity = 1;
     });
+    sparkle.addEventListener('mouseleave', () => {
+      sparkle.style.transform = 'scale(1)';
+      sparkle.style.opacity = 0.8;
+    });
+    sparkle.addEventListener('click', () => {
+      sparkle.remove();
+      const newSparkle = createSparkle();
+      document.body.appendChild(newSparkle);
+      sparkles.push(newSparkle);
+    });
+
+    return sparkle;
   }
     </script>
+
+
 
 </body>
 
