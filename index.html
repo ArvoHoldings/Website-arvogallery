@@ -51,9 +51,13 @@
         <a href="https://www.youtube.com/@arvogallery">YouTube Page</a>
     </p>
 
+
     <script>
   const sparkleCount = 80;
   const sparkles = [];
+
+  // Detect if mobile
+  const isMobile = window.innerWidth <= 768; // adjust breakpoint if needed
 
   for (let i = 0; i < sparkleCount; i++) {
     const sparkle = document.createElement('div');
@@ -78,27 +82,27 @@
       colors[Math.floor(Math.random() * colors.length)]
     }, transparent)`;
 
-    // Random speed
-    sparkle.speed = Math.random() * 1.5 + 0.5; // pixels per frame
+    // Speed: faster on mobile
+    const baseSpeed = Math.random() * 1.5 + 0.5; // pixels per frame
+    sparkle.speed = isMobile ? baseSpeed * 2 : baseSpeed; // double speed on mobile
 
-    // Enable pointer events for interactivity
+    // Enable pointer events
     sparkle.style.pointerEvents = 'auto';
     sparkle.style.transition = 'transform 0.2s, opacity 0.2s';
 
     // Hover effect
     sparkle.addEventListener('mouseenter', () => {
-      sparkle.style.transform = 'scale(2)'; // grow
-      sparkle.style.opacity = 1;            // brighten
+      sparkle.style.transform = 'scale(2)';
+      sparkle.style.opacity = 1;
     });
     sparkle.addEventListener('mouseleave', () => {
-      sparkle.style.transform = 'scale(1)'; // back to normal
+      sparkle.style.transform = 'scale(1)';
       sparkle.style.opacity = 0.8;
     });
 
     // Click effect
     sparkle.addEventListener('click', () => {
-      sparkle.remove(); // disappear when clicked
-      // Optionally, create a new sparkle at random position to maintain count
+      sparkle.remove();
       const newSparkle = createSparkle();
       document.body.appendChild(newSparkle);
       sparkles.push(newSparkle);
@@ -119,7 +123,6 @@
 
   animate();
 
-  // Optional helper function to create new sparkle if one is clicked
   function createSparkle() {
     const sparkle = document.createElement('div');
     sparkle.classList.add('sparkle');
@@ -137,7 +140,9 @@
       colors[Math.floor(Math.random() * colors.length)]
     }, transparent)`;
 
-    sparkle.speed = Math.random() * 1.5 + 0.5;
+    const baseSpeed = Math.random() * 1.5 + 0.5;
+    sparkle.speed = isMobile ? baseSpeed * 2 : baseSpeed;
+
     sparkle.style.pointerEvents = 'auto';
     sparkle.style.transition = 'transform 0.2s, opacity 0.2s';
 
@@ -158,8 +163,7 @@
 
     return sparkle;
   }
-    </script>
-
+</script>
 
 
 </body>
