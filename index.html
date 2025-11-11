@@ -53,29 +53,42 @@
         <a href="https://www.youtube.com/@arvogallery">YouTube Page</a>
     </p>
 
-<script>
-  const sparkleCount = 80; // number of sparkles
+    <script>
+  const sparkleCount = 80;
+
   for (let i = 0; i < sparkleCount; i++) {
     const sparkle = document.createElement('div');
     sparkle.classList.add('sparkle');
+
+    // Random horizontal position
     sparkle.style.left = `${Math.random() * 100}vw`;
-    const size = Math.random() * 10 + 2;
+
+    // Random size (keep your previous size)
+    const size = Math.random() * 8 + 5; // 5–13px
     sparkle.style.width = `${size}px`;
     sparkle.style.height = `${size}px`;
+
+    // Colors remain unchanged
     const colors = ['#ffffff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
     sparkle.style.background = `radial-gradient(circle, ${
       colors[Math.floor(Math.random() * colors.length)]
     }, transparent)`;
+
+    // Random animation duration
     const duration = Math.random() * 4 + 3;
-    const delay = Math.random() * 5;
     sparkle.style.animationDuration = `${duration}s`;
-    sparkle.style.animationDelay = `${delay}s`;
+
+    // **No delay** → all sparkles start immediately
+    sparkle.style.animationDelay = `0s`;
+
     document.body.appendChild(sparkle);
+
+    // Restart at top when finished
     sparkle.addEventListener('animationiteration', () => {
       sparkle.style.left = `${Math.random() * 100}vw`;
     });
   }
-</script>
+    </script>
 
 </body>
 
