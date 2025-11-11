@@ -5,6 +5,7 @@
 <head>
     <title>Arvo Gallery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         .center{
             text-align: center;
@@ -17,20 +18,23 @@
     <style>
   .sparkle {
     position: fixed;
-    width: 6px;
-    height: 6px;
-    background: radial-gradient(circle, #fff, rgba(255,255,255,0));
+    top: 0;
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
+    background: radial-gradient(circle, #fff, rgba(255,255,255,0));
     pointer-events: none;
-    opacity: 0.9;
-    animation: sparkleFade 1s ease-out forwards;
+    opacity: 0.8;
+    animation: fall linear infinite;
   }
-  @keyframes sparkleFade {
-    0% { transform: scale(1) translate(0, 0); opacity: 1; filter: blur(0); }
-    100% { transform: scale(0.2) translate(var(--moveX), var(--moveY)); opacity: 0; filter: blur(2px); }
+
+  @keyframes fall {
+    0%   { transform: translateY(0);   opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
   }
     </style>
-    
+
 </head>
 
 <body>  
@@ -49,24 +53,29 @@
         <a href="https://www.youtube.com/@arvogallery">YouTube Page</a>
     </p>
 
-    <script>
-  document.addEventListener('mousemove', e => {
+<script>
+  const sparkleCount = 80; // number of sparkles
+  for (let i = 0; i < sparkleCount; i++) {
     const sparkle = document.createElement('div');
     sparkle.classList.add('sparkle');
-    const angle = Math.random() * 2 * Math.PI;
-    const distance = Math.random() * 100 + 30;
-    sparkle.style.setProperty('--moveX', `${Math.cos(angle) * distance}px`);
-    sparkle.style.setProperty('--moveY', `${Math.sin(angle) * distance}px`);
-    sparkle.style.left = `${e.clientX}px`;
-    sparkle.style.top = `${e.clientY}px`;
-    sparkle.style.width = `${Math.random() * 6 + 3}px`;
-    sparkle.style.height = sparkle.style.width;
-    const colors = ['#fff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
-    sparkle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random()*colors.length)]}, transparent)`;
+    sparkle.style.left = `${Math.random() * 100}vw`;
+    const size = Math.random() * 10 + 2;
+    sparkle.style.width = `${size}px`;
+    sparkle.style.height = `${size}px`;
+    const colors = ['#ffffff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
+    sparkle.style.background = `radial-gradient(circle, ${
+      colors[Math.floor(Math.random() * colors.length)]
+    }, transparent)`;
+    const duration = Math.random() * 4 + 3;
+    const delay = Math.random() * 5;
+    sparkle.style.animationDuration = `${duration}s`;
+    sparkle.style.animationDelay = `${delay}s`;
     document.body.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 1000);
-  });
-    </script>
+    sparkle.addEventListener('animationiteration', () => {
+      sparkle.style.left = `${Math.random() * 100}vw`;
+    });
+  }
+</script>
 
 </body>
 
