@@ -13,6 +13,24 @@
             margin-right: auto;
         }
     </style>
+
+    <style>
+  .sparkle {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, #fff, rgba(255,255,255,0));
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.9;
+    animation: sparkleFade 1s ease-out forwards;
+  }
+  @keyframes sparkleFade {
+    0% { transform: scale(1) translate(0, 0); opacity: 1; filter: blur(0); }
+    100% { transform: scale(0.2) translate(var(--moveX), var(--moveY)); opacity: 0; filter: blur(2px); }
+  }
+    </style>
+    
 </head>
 
 <body>  
@@ -29,7 +47,27 @@
         <br>
         <br>
         <a href="https://www.youtube.com/@arvogallery">YouTube Page</a>
-    </p>        
+    </p>
+
+    <script>
+  document.addEventListener('mousemove', e => {
+    const sparkle = document.createElement('div');
+    sparkle.classList.add('sparkle');
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = Math.random() * 100 + 30;
+    sparkle.style.setProperty('--moveX', `${Math.cos(angle) * distance}px`);
+    sparkle.style.setProperty('--moveY', `${Math.sin(angle) * distance}px`);
+    sparkle.style.left = `${e.clientX}px`;
+    sparkle.style.top = `${e.clientY}px`;
+    sparkle.style.width = `${Math.random() * 6 + 3}px`;
+    sparkle.style.height = sparkle.style.width;
+    const colors = ['#fff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
+    sparkle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random()*colors.length)]}, transparent)`;
+    document.body.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 1000);
+  });
+    </script>
+
 </body>
 
 </html>
