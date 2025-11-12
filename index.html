@@ -56,7 +56,9 @@
             const sparkle = document.createElement('div');
             sparkle.classList.add('sparkle');
 
-            sparkle.x = Math.random() * containerWidth;
+            sparkle.x = Math.random() * containerWidth - 10; // move 10px left
+            if (sparkle.x < 0) sparkle.x = 0; // prevent negative position  
+            sparkle.style.left = `${sparkle.x}px`;
             sparkle.y = Math.random() * containerHeight;
             sparkle.style.left = `${sparkle.x}px`;
             sparkle.style.top = `${sparkle.y}px`;
@@ -107,7 +109,9 @@
             const sparkle = document.createElement('div');
             sparkle.classList.add('sparkle');
 
-            sparkle.x = Math.random() * containerWidth;
+            const offsetX = 10; // number of pixels to shift left
+            sparkle.x = Math.random() * (containerWidth - offsetX); // ensures they stay inside container
+            sparkle.style.left = `${sparkle.x}px`;
             sparkle.y = 0;
             sparkle.style.left = `${sparkle.x}px`;
             sparkle.style.top = `${sparkle.y}px`;
