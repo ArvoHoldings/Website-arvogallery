@@ -1,152 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Arvo Gallery</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arvo Gallery</title>
     <style>
-        .center-text {
+        body {
+            font-family: serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: white;
         }
 
-        .frame-wrapper {
+        h1 {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+
+        p {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .icons-wrapper {
             display: flex;
-            justify-content: center; /* horizontal center */
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            margin-top: 100px;
         }
 
-        .frame-container {
+        .icon-container {
             position: relative;
-            display: inline-block; /* container matches image size */
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            overflow: hidden; /* contain sparkles */
+        }
+
+        .icon-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            z-index: 1;
+            position: relative;
+        }
+
+        .icon-container img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
 
         .sparkle {
-            position: absolute; /* relative to frame-container */
+            position: absolute;
             border-radius: 50%;
             opacity: 0.8;
             pointer-events: auto;
             transition: transform 0.2s, opacity 0.2s;
+            z-index: 2;
         }
     </style>
 </head>
 
-<body>  
-    <h1 class="center-text">Arvo Gallery</h1>
-    <br>
-    <p class="center-text">
-        Producing creative sounds and visuals 🎨
-        <br><br><br><br><br><br><br>
-    </p>
+<body>
+    <h1>Arvo Gallery</h1>
+    <p>Producing creative sounds and visuals 🎨</p>
 
-    <div class="frame-wrapper">
-        <a href="https://music.apple.com/us/album/lofi-1/1852518408">
-            <div class="frame-container">
-                <img src="/Images/picture frame.png" height="200" width="200" alt="picture frame" title="picture frame">
+    <div class="icons-wrapper">
+        <a href="https://instagram.com/arvogallery" target="_blank">
+            <div class="icon-container" id="instagram-container">
+                <img src="/Images/instagram symbol.png" alt="Instagram">
+            </div>
+        </a>
+
+        <a href="https://youtube.com/@arvogallery" target="_blank">
+            <div class="icon-container" id="youtube-container">
+                <img src="/Images/youtube symbol.png" alt="YouTube">
+            </div>
+        </a>
+
+        <a href="https://music.apple.com/us/artist/arvo-gallery/1851560584" target="_blank">
+            <div class="icon-container" id="apple-container">
+                <img src="/Images/apple music symbol.png" alt="Apple Music">
             </div>
         </a>
     </div>
 
     <script>
-        const container = document.querySelector('.frame-container');
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-        const sparkleCount = 40;
-        const sparkles = [];
         const isMobile = window.innerWidth <= 768;
+        const sparkleCount = 25;
+        const colors = ['#ffffff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
 
-        for (let i = 0; i < sparkleCount; i++) {
-            const sparkle = document.createElement('div');
-            sparkle.classList.add('sparkle');
+        function createSparkles(container) {
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            const sparkles = [];
 
-            sparkle.x = Math.random() * containerWidth - 4; // move 10px left
-            if (sparkle.x < 0) sparkle.x = 0; // prevent negative position  
-            sparkle.style.left = `${sparkle.x}px`;
-            sparkle.y = Math.random() * containerHeight;
-            sparkle.style.left = `${sparkle.x}px`;
-            sparkle.style.top = `${sparkle.y}px`;
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
 
-            sparkle.size = Math.random() * 8 + 5;
-            sparkle.style.width = `${sparkle.size}px`;
-            sparkle.style.height = `${sparkle.size}px`;
+                sparkle.size = Math.random() * 6 + 4;
+                sparkle.style.width = `${sparkle.size}px`;
+                sparkle.style.height = `${sparkle.size}px`;
 
-            const colors = ['#ffffff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
-            sparkle.style.background = `radial-gradient(circle, ${
-                colors[Math.floor(Math.random() * colors.length)]
-            }, transparent)`;
+                sparkle.x = Math.random() * width;
+                sparkle.y = Math.random() * height;
 
-            const baseSpeed = Math.random() * 1.5 + 0.5;
-            sparkle.speed = isMobile ? baseSpeed * 2 : baseSpeed;
+                sparkle.style.left = `${sparkle.x}px`;
+                sparkle.style.top = `${sparkle.y}px`;
 
-            sparkle.addEventListener('mouseenter', () => {
-                sparkle.style.transform = 'scale(2)';
-                sparkle.style.opacity = 1;
-            });
-            sparkle.addEventListener('mouseleave', () => {
-                sparkle.style.transform = 'scale(1)';
-                sparkle.style.opacity = 0.8;
-            });
-            sparkle.addEventListener('click', () => {
-                sparkle.remove();
-                const newSparkle = createSparkle();
-                container.appendChild(newSparkle);
-                sparkles.push(newSparkle);
-            });
+                sparkle.speed = (Math.random() * 1.5 + 0.5) * (isMobile ? 2 : 1);
+                sparkle.style.background = `radial-gradient(circle, ${
+                    colors[Math.floor(Math.random() * colors.length)]
+                }, transparent)`;
 
-            container.appendChild(sparkle);
-            sparkles.push(sparkle);
-        }
+                sparkle.addEventListener('mouseenter', () => {
+                    sparkle.style.transform = 'scale(2)';
+                    sparkle.style.opacity = 1;
+                });
 
-        function animate() {
-            for (const s of sparkles) {
-                s.y += s.speed;
-                if (s.y > containerHeight) s.y = 0;
-                s.style.top = `${s.y}px`;
+                sparkle.addEventListener('mouseleave', () => {
+                    sparkle.style.transform = 'scale(1)';
+                    sparkle.style.opacity = 0.8;
+                });
+
+                container.appendChild(sparkle);
+                sparkles.push(sparkle);
             }
-            requestAnimationFrame(animate);
+
+            function animate() {
+                for (const s of sparkles) {
+                    s.y += s.speed;
+                    if (s.y > height) s.y = 0;
+                    s.style.top = `${s.y}px`;
+                }
+                requestAnimationFrame(animate);
+            }
+
+            animate();
         }
 
-        animate();
-
-        function createSparkle() {
-            const sparkle = document.createElement('div');
-            sparkle.classList.add('sparkle');
-
-            const offsetX = 4; // number of pixels to shift left
-            sparkle.x = Math.random() * (containerWidth - offsetX); // ensures they stay inside container
-            sparkle.style.left = `${sparkle.x}px`;
-            sparkle.y = 0;
-            sparkle.style.left = `${sparkle.x}px`;
-            sparkle.style.top = `${sparkle.y}px`;
-            sparkle.size = Math.random() * 8 + 5;
-            sparkle.style.width = `${sparkle.size}px`;
-            sparkle.style.height = `${sparkle.size}px`;
-
-            const colors = ['#ffffff', '#ffd700', '#ff69b4', '#87cefa', '#aaffaa'];
-            sparkle.style.background = `radial-gradient(circle, ${
-                colors[Math.floor(Math.random() * colors.length)]
-            }, transparent)`;
-
-            const baseSpeed = Math.random() * 1.5 + 0.5;
-            sparkle.speed = isMobile ? baseSpeed * 2 : baseSpeed;
-
-            sparkle.style.pointerEvents = 'auto';
-            sparkle.style.transition = 'transform 0.2s, opacity 0.2s';
-
-            sparkle.addEventListener('mouseenter', () => {
-                sparkle.style.transform = 'scale(2)';
-                sparkle.style.opacity = 1;
-            });
-            sparkle.addEventListener('mouseleave', () => {
-                sparkle.style.transform = 'scale(1)';
-                sparkle.style.opacity = 0.8;
-            });
-            sparkle.addEventListener('click', () => {
-                sparkle.remove();
-                const newSparkle = createSparkle();
-                container.appendChild(newSparkle);
-                sparkles.push(newSparkle);
-            });
-
-            return sparkle;
-        }
+        // Apply sparkles to all three containers
+        document.querySelectorAll('.icon-container').forEach(container => createSparkles(container));
     </script>
 </body>
 </html>
